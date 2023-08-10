@@ -145,4 +145,32 @@ test2DB$H_predicted <- round(predict(hitsLinReg, newdata = test2DB), 1)
 test2DB$H_diff <- abs(test2DB$H - test2DB$H_predicted)
 test2DB$abs_perc_err <- round(test2DB$H_diff / (test2DB$H + 1), 3)
 MAPE <- round(mean(test2DB$abs_perc_err) * 100, 2)
+# Creating a RFE Model using Random Forest to Create a More Accurate Model
+control <- rfeControl(functions = rfFuncs,
+                      method = "repeatedcv",
+                      repeats = 5,
+                      number = 10)
+# Splitting the Data into Training and Testing Sub-Datasets
+x_train <- trainDB[, -c(1, 59:64)]
+x_test_1 <- testDB[, -c(1, 59:61)]
+x_test_2 <- test2DB[, -c(1, 59:61)]
+y_train <- trainDB[, c("H")]
+y_test_1 <- testDB[, c("H")]
+y_test_2 <- test2DB[, c("H")]
+# Inputting the Training Data to the Model
+result_rfe1 <- rfe(x = x_train,
+                   y = y_train,
+                   sizes = c(1:13),
+                   rfeControl = control)
+# Predicting the Number of Hits and Calculating MAPE
+y_test_1 <- data.frame(y_test_1)
+y_test_1$H_predicted <- predict(result_rfe1, x_test_1)
+y_test_1$H_diff <- abs(y_test_1[, 1] - y_test_1[, 2])
+y_test_1$abs_perc_err <- round(y_test_1[, 3] / (y_test_1[, 1] + 1), 3)
+MAPE <- round(mean(y_test_1[, 4]) * 100, 2)
+y_test_2 <- data.frame(y_test_2)
+y_test_2$H_predicted <- predict(result_rfe1, x_test_2)
+y_test_2$H_diff <- abs(y_test_2[, 1] - y_test_2[, 2])
+y_test_2$abs_perc_err <- round(y_test_2[, 3] / (y_test_2[, 1] + 1), 3)
+MAPE <- round(mean(y_test_2[, 4]) * 100, 2)
 
