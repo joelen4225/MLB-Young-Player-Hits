@@ -151,9 +151,9 @@ control <- rfeControl(functions = rfFuncs,
                       repeats = 5,
                       number = 10)
 # Splitting the Data into Training and Testing Sub-Datasets
-x_train <- trainDB[, -c(1, 59:64)]
-x_test_1 <- testDB[, -c(1, 59:61)]
-x_test_2 <- test2DB[, -c(1, 59:61)]
+x_train <- trainDB[, c(6, 11:13, 19:20, 41, 49)]
+x_test_1 <- testDB[, c(6, 11:13, 19:20, 41, 49)]
+x_test_2 <- test2DB[, c(6, 11:13, 19:20, 41, 49)]
 y_train <- trainDB[, c("H")]
 y_test_1 <- testDB[, c("H")]
 y_test_2 <- test2DB[, c("H")]
@@ -173,4 +173,3 @@ y_test_2$H_predicted <- predict(result_rfe1, x_test_2)
 y_test_2$H_diff <- abs(y_test_2[, 1] - y_test_2[, 2])
 y_test_2$abs_perc_err <- round(y_test_2[, 3] / (y_test_2[, 1] + 1), 3)
 MAPE <- round(mean(y_test_2[, 4]) * 100, 2)
-
