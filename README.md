@@ -1,2 +1,2 @@
 # MLB-Young-Player-Hits
-This is the folder I used to work on my predictive model for young MLB player hits.
+This project has a select focus on MLB players with less than 3 years of service time. I created a linear regression model to predict the amount of hits the players will get each game based on their stats from the previous game and the stats of the opposing starting pitcher. The model then has 3 stages of optimization. I am currently on stage 2 which includes reducing down to factors 95% significant or more and then another optimization technique. Optimization 1 included reducing down to factors 80% significant or more and optimization 3 will include standardizing the factor coefficients. 
